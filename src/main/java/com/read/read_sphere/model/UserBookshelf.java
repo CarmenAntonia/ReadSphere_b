@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class UserBookshelf {
 
     @Id
+    @Column(name = "bookself_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long shelfId;
 
@@ -16,8 +17,12 @@ public class UserBookshelf {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_user_id"))
     private User user;
 
-    @OneToMany
-    @JoinColumn(name = "book_id")
+    @ManyToMany
+    @JoinTable(
+            name = "books_bookshelves",
+            joinColumns = @JoinColumn(name = "bookshelf_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
     private List<Book> books = new ArrayList<>();
 
     public UserBookshelf() {
