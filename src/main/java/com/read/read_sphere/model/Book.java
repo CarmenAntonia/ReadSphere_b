@@ -2,6 +2,9 @@ package com.read.read_sphere.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "books")
 public class Book {
@@ -23,8 +26,8 @@ public class Book {
     @Column(length = 255)
     private String publisher;
 
-    @Column(name = "publication_year")
-    private Integer publicationYear;
+    @Column(name = "publication_date")
+    private String publicationDate;
 
     @Column(name = "cover_pic_url")
     private String coverPicUrl;
@@ -36,6 +39,9 @@ public class Book {
 
     @Column(name = "total_ratings")
     private Integer totalRatings = 0;
+
+    @ManyToMany(mappedBy = "books")
+    private List<UserBookshelf> bookShelves = new ArrayList<>();
 
     public Book() {
     }
@@ -76,12 +82,12 @@ public class Book {
         this.publisher = publisher;
     }
 
-    public Integer getPublicationYear() {
-        return publicationYear;
+    public String getPublicationDate() {
+        return publicationDate;
     }
 
-    public void setPublicationYear(Integer publicationYear) {
-        this.publicationYear = publicationYear;
+    public void setPublicationDate(String publicationDate) {
+        this.publicationDate = publicationDate;
     }
 
     public String getGenre() {
