@@ -12,12 +12,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http
-                .authorizeHttpRequests(request -> {
-                    request.requestMatchers("/register", "/logIn", "/account", "/userId", "/token", "/books", "/getBooks", "/book" ).permitAll();
-                    request.anyRequest().authenticated();
-                })
-                .csrf(AbstractHttpConfigurer::disable);
+        //http
+//                .authorizeHttpRequests(request -> {
+//                    request.requestMatchers("/register", "/logIn", "/account", "/userId", "/token" ).permitAll();
+//                    request.anyRequest().authenticated();
+//                })
+//                .csrf(AbstractHttpConfigurer::disable);
+        http.authorizeRequests()
+                .anyRequest().permitAll() // Allow all requests
+                .and().csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
 

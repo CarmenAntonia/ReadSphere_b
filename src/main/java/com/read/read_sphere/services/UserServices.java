@@ -1,10 +1,15 @@
 package com.read.read_sphere.services;
+
+import com.read.read_sphere.model.Book;
+import com.read.read_sphere.model.UserBookshelf;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.read.read_sphere.model.User;
 import com.read.read_sphere.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import com.read.read_sphere.DTOs.LoginUserDTO;
+import java.util.List;
 
 @Service
 public class UserServices {
@@ -35,5 +40,39 @@ public class UserServices {
 
     public Iterable<User> getUsers() {
         return userRepository.findAll();
+    }
+  
+    public User getUserById(Long userId){
+        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public String getUserName(long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null) {
+            return user.getName();
+        }
+        return "Unknown User";
+    }
+
+    public User getUserByEmail(String email){
+        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Transactional
+    public User UpdateUser(Long userId, String name, String email,String password, String bio, HttpSession session) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        if(name != null){
+            user.setName(name);
+        }
+        if(email != null) {
+            user.setEmail(email);
+        }
+        if(password != null) {
+            user.setPassword(passwordEncoder.encode(password));
+        }
+        if(bio != null){
+            user.setBio(bio);
+        }
+        return userRepository.save(user);
     }
 }

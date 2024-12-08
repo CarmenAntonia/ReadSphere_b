@@ -32,7 +32,17 @@ public class LoginController {
     }
 
     @GetMapping("/token")
-    public String getToken(HttpSession session){
-        return (String) session.getAttribute("token");
+    public String[] getTokenAndUserId(HttpSession session){
+        String[] token = new String[2];
+        Object sessionToken = session.getAttribute("token");
+        Object sessionUserId = session.getAttribute("userId");
+
+        if (sessionToken == null || sessionUserId == null) {
+            throw new IllegalStateException("Token or User ID is missing in the session.");
+        }
+
+        token[0] = sessionToken.toString();
+        token[1] = sessionUserId.toString();
+        return token;
     }
 }

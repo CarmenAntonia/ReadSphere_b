@@ -9,5 +9,4 @@ public class ReadSphereApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ReadSphereApplication.class, args);
 	}
-
 }

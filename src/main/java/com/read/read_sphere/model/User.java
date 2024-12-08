@@ -24,6 +24,8 @@ public class User {
     private String role = "USER";
 
     private String bio;
+  
+    private String profilePic ;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserBookshelf> bookshelves = new ArrayList<>();
@@ -80,6 +82,10 @@ public class User {
     public void setBio(String bio) {
         this.bio = bio;
     }
+
+    public String getProfilePicture() { return profilePic; }
+
+    public void setProfilePicture(String profilePic) { this.profilePic = profilePic; }
 
     public List<UserBookshelf> getBookshelves() {
         return bookshelves;

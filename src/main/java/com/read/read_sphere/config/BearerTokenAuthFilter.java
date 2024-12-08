@@ -110,6 +110,7 @@ public class BearerTokenAuthFilter {
                 userRepository.save(user);
             }
             session.setAttribute("token", accessToken);
+            session.setAttribute("userId",user.getUserId());
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     email,
                     null,
