@@ -1,4 +1,5 @@
 package com.read.read_sphere.services;
+
 import com.read.read_sphere.model.Book;
 import com.read.read_sphere.model.UserBookshelf;
 import jakarta.servlet.http.HttpSession;
@@ -8,7 +9,6 @@ import com.read.read_sphere.model.User;
 import com.read.read_sphere.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import com.read.read_sphere.DTOs.LoginUserDTO;
-
 import java.util.List;
 
 @Service
@@ -41,7 +41,7 @@ public class UserServices {
     public Iterable<User> getUsers() {
         return userRepository.findAll();
     }
-
+  
     public User getUserById(Long userId){
         return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
     }
