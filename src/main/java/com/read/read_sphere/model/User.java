@@ -24,6 +24,7 @@ public class User {
     private String role = "USER";
 
     private String bio;
+  
     private String profilePic ;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
