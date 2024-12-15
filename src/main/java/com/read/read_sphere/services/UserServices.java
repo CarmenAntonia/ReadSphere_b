@@ -10,6 +10,7 @@ import com.read.read_sphere.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import com.read.read_sphere.DTOs.LoginUserDTO;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServices {
@@ -46,6 +47,11 @@ public class UserServices {
         return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+    public String getBio(long id) {
+        Optional<User> book = userRepository.findById(id);
+        return book.map(User::getBio).orElse(null);
+    }
+
     public String getUserName(long userId) {
         User user = userRepository.findById(userId).orElse(null);
         if (user != null) {
@@ -74,5 +80,11 @@ public class UserServices {
             user.setBio(bio);
         }
         return userRepository.save(user);
+    }
+
+    public boolean updateBio(Long userId, String bio) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setBio(bio);
+        return userRepository.save(user) != null;
     }
 }

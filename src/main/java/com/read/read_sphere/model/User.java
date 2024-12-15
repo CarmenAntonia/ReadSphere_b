@@ -94,4 +94,5 @@ public class User {
     public void setBookshelves(List<UserBookshelf> bookshelves) {
         this.bookshelves = bookshelves;
     }
+
 }

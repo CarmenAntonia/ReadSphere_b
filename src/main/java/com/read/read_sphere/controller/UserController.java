@@ -1,14 +1,10 @@
 package com.read.read_sphere.controller;
 
-import ch.qos.logback.core.joran.spi.NoAutoStart;
 import com.read.read_sphere.DTOs.LoginUserDTO;
 import com.read.read_sphere.model.User;
 import com.read.read_sphere.repository.UserRepository;
 import com.read.read_sphere.services.UserServices;
-import org.springframework.security.core.context.SecurityContextHolder;
 import jakarta.servlet.http.HttpSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @CrossOrigin(origins = "${frontend.redirect-url}", allowedHeaders = "*", allowCredentials = "true")
 @RestController
@@ -62,6 +60,28 @@ public class UserController {
         return handleUserSession(session, (user) ->
                 ResponseEntity.ok(Collections.singletonMap("userName", user.getName()))
         );
+    }
+
+    @GetMapping("/user/bio")
+    public ResponseEntity<Map<String, String>> getUserBio(@RequestParam("userId") Long userId) {
+        String bio = userServices.getBio(userId);
+        if (bio != null) {
+            Map<String, String> response = new HashMap<>();
+            response.put("bio", bio);
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/user/bio")
+    public ResponseEntity<String> updateUserBio(@RequestParam("userId") Long userId, @RequestBody User bioRequest) {
+        boolean isUpdated = userServices.updateBio(userId, bioRequest.getBio());
+        if (isUpdated) {
+            return ResponseEntity.ok("Bio updated successfully");
+        } else {
+            return ResponseEntity.status(500).body("Failed to update bio");
+        }
     }
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
