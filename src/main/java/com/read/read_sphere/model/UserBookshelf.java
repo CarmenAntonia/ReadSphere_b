@@ -45,8 +45,6 @@ public class UserBookshelf {
     }
 
     public void setBooks(List<Book> books) {
-        this.books = books;
+        this.books =books;
     }
-
-    public void addBook(Book book) { books.add(book);}
 }
