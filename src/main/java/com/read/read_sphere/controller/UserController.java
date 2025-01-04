@@ -117,7 +117,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in or token missing");
         }
 
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findByUserId(userId).orElse(null);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }

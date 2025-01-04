@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.read.read_sphere.model.User;
 import com.read.read_sphere.repository.UserRepository;
+import com.read.read_sphere.services.UserBookshelfService;
 import org.springframework.stereotype.Service;
 import com.read.read_sphere.DTOs.LoginUserDTO;
 import java.util.List;
@@ -25,6 +26,8 @@ public class UserServices {
     public void CreateUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+        UserBookshelfService userBookshelfService = new UserBookshelfService();
+        userBookshelfService.createDefaultShelves(user.getUserId());
     }
 
     public boolean LogIn(LoginUserDTO user, HttpSession session) {
@@ -44,16 +47,16 @@ public class UserServices {
     }
   
     public User getUserById(Long userId){
-        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     public String getBio(long id) {
-        Optional<User> book = userRepository.findById(id);
+        Optional<User> book = userRepository.findByUserId(id);
         return book.map(User::getBio).orElse(null);
     }
 
     public String getUserName(long userId) {
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findByUserId(userId).orElse(null);
         if (user != null) {
             return user.getName();
         }
@@ -66,7 +69,7 @@ public class UserServices {
 
     @Transactional
     public User UpdateUser(Long userId, String name, String email,String password, String bio, HttpSession session) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("User not found"));
         if(name != null){
             user.setName(name);
         }
@@ -83,7 +86,7 @@ public class UserServices {
     }
 
     public boolean updateBio(Long userId, String bio) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("User not found"));
         user.setBio(bio);
         return userRepository.save(user) != null;
     }
