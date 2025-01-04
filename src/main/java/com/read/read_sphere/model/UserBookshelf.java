@@ -17,13 +17,16 @@ public class UserBookshelf {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_user_id"))
     private User user;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "books_bookshelves",
             joinColumns = @JoinColumn(name = "bookshelf_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
     private List<Book> books = new ArrayList<>();
+
+    @Column(name = "shelf_name", nullable = false)
+    private String shelfName;
 
     public UserBookshelf() {
     }
@@ -45,5 +48,14 @@ public class UserBookshelf {
     }
 
     public void setBooks(List<Book> books) {
-        this.books =books;
+        this.books = books;
     }
+
+    public String getShelfName() {
+        return shelfName;
+    }
+
+    public void setShelfName(String shelfName) {
+        this.shelfName = shelfName;
+    }
+}
