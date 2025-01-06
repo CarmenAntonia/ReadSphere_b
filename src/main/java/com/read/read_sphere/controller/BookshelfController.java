@@ -3,10 +3,12 @@ package com.read.read_sphere.controller;
 import com.read.read_sphere.model.UserBookshelf;
 import com.read.read_sphere.services.UserBookshelfService;
 import org.springframework.http.ResponseEntity;
+import com.read.read_sphere.model.Book;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/bookshelves")
@@ -16,17 +18,12 @@ public class BookshelfController {
     private UserBookshelfService userBookshelfService;
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<UserBookshelf>> getUserBookshelves(@PathVariable Long userId) {
-        List<UserBookshelf> bookshelves = userBookshelfService.getShelvesByUserId(userId);
-        return ResponseEntity.ok(bookshelves);
+    @GetMapping("/{userId}/with-books")
+    public ResponseEntity<Map<String, List<Book>>> getUserBookshelvesWithBooks(@PathVariable Long userId) {
+        Map<String, List<Book>> shelvesWithBooks = userBookshelfService.getShelvesWithBooksByUserId(userId);
+        return ResponseEntity.ok(shelvesWithBooks);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    @PostMapping("/{userId}")
-    public UserBookshelf createOrGetShelf(@PathVariable Long userId, @RequestParam String shelfName) {
-        return userBookshelfService.getOrCreateShelf(userId, shelfName);
-    }
 
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     @PostMapping("/{userId}/{shelfName}/add-book/{bookId}")

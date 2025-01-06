@@ -9,7 +9,9 @@ import com.read.read_sphere.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -23,19 +25,15 @@ public class UserBookshelfService {
     @Autowired
     private BookRepository bookRepository;
 
-    public UserBookshelf getOrCreateShelf(Long userId, String shelfName) {
-        return userBookshelfRepository.findByUserUserIdAndShelfName(userId, shelfName).orElseGet(() -> {
-            User user = userRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("User not found"));
-            UserBookshelf newShelf = new UserBookshelf();
-            newShelf.setShelfName(shelfName);
-            newShelf.setUser(user);
-            return userBookshelfRepository.save(newShelf);
-        });
+    public Map<String, List<Book>> getShelvesWithBooksByUserId(Long userId) {
+        List<UserBookshelf> shelves = userBookshelfRepository.findByUserIdWithBooks(userId);
+        Map<String, List<Book>> shelvesWithBooks = new HashMap<>();
+        for (UserBookshelf shelf : shelves) {
+            shelvesWithBooks.put(shelf.getShelfName(), shelf.getBooks());
+        }
+        return shelvesWithBooks;
     }
 
-    public List<UserBookshelf> getShelvesByUserId(Long userId) {
-        return userBookshelfRepository.findByUserIdWithBooks(userId);
-    }
 
     public UserBookshelf addBookToShelf(Long userId, String shelfName, Long bookId) {
         Optional<UserBookshelf> shelfOpt = userBookshelfRepository.findByUserUserIdAndShelfName(userId, shelfName);

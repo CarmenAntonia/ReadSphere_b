@@ -12,7 +12,9 @@ import java.util.Optional;
 public interface UserBookshelfRepository extends CrudRepository<UserBookshelf, Long> {
     Optional<UserBookshelf> findByUserUserIdAndShelfName(Long userId, String shelfName);
 
-    @Query("SELECT b FROM UserBookshelf b LEFT JOIN FETCH b.books WHERE b.user.userId = :userId")
+    @Query("SELECT DISTINCT ubs FROM UserBookshelf ubs " +
+            "LEFT JOIN FETCH ubs.books " +
+            "WHERE ubs.user.userId = :userId")
     List<UserBookshelf> findByUserIdWithBooks(@Param("userId") Long userId);
 
 }

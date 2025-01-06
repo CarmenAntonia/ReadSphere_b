@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user/bookshelf")
-public class UserBookshelfController {
+public class  UserBookshelfController {
 
     private final UserBookshelfService userBookshelfService;
 
