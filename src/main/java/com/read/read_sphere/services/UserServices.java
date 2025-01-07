@@ -26,8 +26,8 @@ public class UserServices {
     public void CreateUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        UserBookshelfService userBookshelfService = new UserBookshelfService();
-        userBookshelfService.createDefaultShelves(user.getUserId());
+        //UserBookshelfService userBookshelfService = new UserBookshelfService();
+       // userBookshelfService.createDefaultShelves(user.getUserId());
     }
 
     public boolean LogIn(LoginUserDTO user, HttpSession session) {

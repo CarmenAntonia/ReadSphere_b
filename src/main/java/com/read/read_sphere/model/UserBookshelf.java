@@ -14,7 +14,7 @@ public class UserBookshelf {
     private Long shelfId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_user_id"))
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = true, foreignKey = @ForeignKey(name = "fk_user_id"))
     private User user;
 
     @ManyToMany(fetch = FetchType.EAGER)
