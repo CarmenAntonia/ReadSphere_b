@@ -1,20 +1,13 @@
 package com.read.read_sphere.controller;
 
-import ch.qos.logback.core.joran.spi.NoAutoStart;
 import com.read.read_sphere.DTOs.LoginUserDTO;
+import com.read.read_sphere.DTOs.UserDTO;
 import com.read.read_sphere.model.User;
 import com.read.read_sphere.services.UserServices;
 import jakarta.servlet.http.HttpSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.ErrorResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
@@ -46,4 +39,29 @@ public class UserController {
     public Long getUserId(HttpSession session){
         return (Long) session.getAttribute("userId");
     }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable("userId") Long userId){
+        var user = userServices.getUserById(userId);
+        if(user != null)
+            return ResponseEntity.ok(user);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
+    @PatchMapping("/user/userBio/{userId}")
+    public ResponseEntity<UserDTO> updateUserBio(@RequestBody String bio, @PathVariable("userId") Long userId){
+        var user = userServices.updateUserBio(userId, bio);
+        if (user != null)
+            return ResponseEntity.ok(user);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
+    @PatchMapping("/user/userName/{userId}")
+    public ResponseEntity<UserDTO> updateUserName(@RequestBody String name, @PathVariable("userId") Long userId){
+        var user = userServices.updateUserName(userId, name);
+        if (user != null)
+            return ResponseEntity.ok(user);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
 }
