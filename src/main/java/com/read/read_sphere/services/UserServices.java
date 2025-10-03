@@ -1,10 +1,12 @@
 package com.read.read_sphere.services;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.read.read_sphere.DTOs.LoginUserDTO;
+import com.read.read_sphere.DTOs.UserDTO;
 import com.read.read_sphere.model.User;
 import com.read.read_sphere.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.read.read_sphere.DTOs.LoginUserDTO;
 
 @Service
 public class UserServices {
@@ -33,7 +35,28 @@ public class UserServices {
         return false;
     }
 
-    public Iterable<User> getUsers() {
-        return userRepository.findAll();
+    public UserDTO getUserById(long userId) {
+        var user = userRepository.findById(userId);
+        return user.map(value -> new UserDTO(value.getName(), value.getBio())).orElse(null);
+    }
+
+    public UserDTO updateUserBio(long userId, String newBio) {
+        var user = userRepository.findById(userId).orElse(null);
+        if(user != null){
+            user.setBio(newBio);
+            userRepository.save(user);
+            return new UserDTO(user.getName(), user.getBio());
+        }
+        return null;
+    }
+
+    public UserDTO updateUserName(long userId, String name) {
+        var user = userRepository.findById(userId).orElse(null);
+        if(user != null){
+            user.setName(name);
+            userRepository.save(user);
+            return new UserDTO(user.getName(), user.getBio());
+        }
+        return null;
     }
 }
