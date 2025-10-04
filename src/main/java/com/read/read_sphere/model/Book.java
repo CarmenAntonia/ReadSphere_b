@@ -40,7 +40,7 @@ public class Book {
     @Column(name = "total_ratings")
     private Integer totalRatings = 0;
 
-    @ManyToMany(mappedBy = "books")
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserBookshelf> bookShelves = new ArrayList<>();
 
     public Book() {
