@@ -1,8 +1,6 @@
 package com.read.read_sphere.model;
 
 import jakarta.persistence.*;
-import java.util.List;
-import java.util.ArrayList;
 
 @Entity
 @Table(name = "user_bookshelves")
@@ -17,15 +15,21 @@ public class UserBookshelf {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_user_id"))
     private User user;
 
-    @ManyToMany
-    @JoinTable(
-            name = "books_bookshelves",
-            joinColumns = @JoinColumn(name = "bookshelf_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id")
-    )
-    private List<Book> books = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "book_id", referencedColumnName = "book_id", nullable = false, foreignKey = @ForeignKey(name = "fk_book_id"))
+    private Book book;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "shelf_type", nullable = false, length = 30)
+    private ShelfType shelfType;
 
     public UserBookshelf() {
+    }
+
+    public UserBookshelf(User user, Book book, ShelfType shelfType) {
+        this.user = user;
+        this.book = book;
+        this.shelfType = shelfType;
     }
 
     public Long getShelfId() {
@@ -40,11 +44,15 @@ public class UserBookshelf {
         this.user = user;
     }
 
-    public List<Book> getBooks() {
-        return books;
-    }
+    public Book getBook() { return book; }
+    public void setBook(Book book) { this.book = book; }
 
-    public void setBooks(List<Book> books) {
-        this.books = books;
+    public ShelfType getShelfType() { return shelfType; }
+    public void setShelfType(ShelfType shelfType) { this.shelfType = shelfType; }
+
+    public enum ShelfType {
+        READ,
+        CURRENTLY_READING,
+        WANT_TO_READ
     }
 }
