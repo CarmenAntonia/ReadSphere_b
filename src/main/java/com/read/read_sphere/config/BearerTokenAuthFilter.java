@@ -92,7 +92,7 @@ public class BearerTokenAuthFilter {
         }
     }
 
-    public void handleGoogleLoginAndCreateUser(String code, HttpSession session) {
+    public Long handleGoogleLoginAndCreateUser(String code) {
         String accessToken = getOauthAccessTokenGoogle(code);
         JsonNode profile = getProfileDetailsGoogle(accessToken);
 
@@ -109,13 +109,13 @@ public class BearerTokenAuthFilter {
                 user = new User(name, email, null);
                 userRepository.save(user);
             }
-            session.setAttribute("token", accessToken);
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     email,
                     null,
                     List.of()
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            return user.getUserId();
         } else {
             logger.error("Email or name is missing in the Google profile.");
             throw new IllegalArgumentException("Email or name is missing in the Google profile.");
